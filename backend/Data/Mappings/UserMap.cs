@@ -50,13 +50,58 @@ public class UserMap : IEntityTypeConfiguration<User>
         builder
             .Property(x => x.CreatedAt)
             .HasColumnName("CreatedAt")
-            .HasColumnType("DATETIME")
+            .HasColumnType("DATETIME2")
             .IsRequired();
 
         builder
             .Property(x => x.UpdateAt)
             .HasColumnName("UpdateAt")
-            .HasColumnType("DATETIME")
+            .HasColumnType("DATETIME2")
             .IsRequired(false);
+
+        builder
+            .HasMany(x => x.Roles)
+            .WithMany(x => x.Users)
+            .UsingEntity<Dictionary<string, object>>(
+                "RoleUser",
+                r => r
+                    .HasOne<Role>()
+                    .WithMany()
+                    .HasForeignKey("RoleId")
+                    .HasConstraintName("FK_RoleUser_RoleId")
+                    .OnDelete(DeleteBehavior.Restrict),                
+                u => u
+                    .HasOne<User>()
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .HasConstraintName("FK_RoleUser_UserId")
+                    .OnDelete(DeleteBehavior.Cascade));
+
+        builder
+            .HasMany(x => x.Events)
+            .WithMany(x => x.Users)
+            .UsingEntity<Dictionary<string, object>>(
+                "EventUser",
+                e => e
+                    .HasOne<Event>()
+                    .WithMany()
+                    .HasForeignKey("EventId")
+                    .HasConstraintName("FK_EventUser_EventId")
+                    .OnDelete(DeleteBehavior.Restrict),
+                
+                u => u
+                    .HasOne<User>()
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .HasConstraintName("FK_EventUser_UserId")
+                    .OnDelete(DeleteBehavior.Cascade));
+
+        builder
+            .HasMany(x => x.MyEvents)
+            .WithOne(x => x.Creator)
+            .HasForeignKey("UserId")
+            .HasConstraintName("FK_Event_Creator")
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired();
     }
 }
