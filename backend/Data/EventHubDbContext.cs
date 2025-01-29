@@ -1,7 +1,7 @@
 using backend.Data.Mappings;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
-namespace backend.Mappings;
+namespace backend.Data;
 public class EventHubDbContext : DbContext
 {
     /* =======================================================
