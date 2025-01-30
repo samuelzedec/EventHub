@@ -21,8 +21,8 @@ public class EventHubDbContext : DbContext
         modelBuilder.ApplyConfiguration(new EventMap());
         modelBuilder.ApplyConfiguration(new RoleMap());
         modelBuilder.ApplyConfiguration(new UserMap());
+        
         // Criando uma seeder
-
         modelBuilder.Entity<Role>().HasData(
             new Role { Id = 1, Name = "Admin", CreatedAt = DateTime.UtcNow },
             new Role { Id = 2, Name = "User", CreatedAt = DateTime.UtcNow }

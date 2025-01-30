@@ -1,7 +1,7 @@
 using backend.Data;
+using backend.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
-
 
 internal class Program
 {
@@ -12,6 +12,7 @@ internal class Program
 
 		ConfigureMvc(builder);
 		DatabaseSettings(builder, connectionString);
+		ConfigureServices(builder);
 
 		var app = builder.Build();
 		app.Run();
@@ -32,13 +33,18 @@ internal class Program
 	{
 		builder.Services
 			.AddControllers()
-			.ConfigureApiBehaviorOptions(options => 
+			.ConfigureApiBehaviorOptions(options =>
 				options.SuppressModelStateInvalidFilter = true)
 			.AddJsonOptions(options =>
 			{
-				options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles; 
-            	
+				options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 				options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault;
 			});
+		
+	}
+
+	private static void ConfigureServices(WebApplicationBuilder builder)
+	{
+		builder.Services.AddScoped<UserRepository>();
 	}
 }
