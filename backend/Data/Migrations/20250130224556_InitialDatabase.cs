@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace backend.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class StartingDatabase : Migration
+    public partial class InitialDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -82,15 +82,14 @@ namespace backend.Data.Migrations
                     MaxCapacity = table.Column<int>(type: "INT", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: true),
-                    UserId = table.Column<int>(type: "INT", nullable: false),
-                    CreatorId = table.Column<int>(type: "int", nullable: false)
+                    CreatorId = table.Column<int>(type: "INT", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Event_Id", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Event_Creator",
-                        column: x => x.UserId,
+                        column: x => x.CreatorId,
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -149,8 +148,8 @@ namespace backend.Data.Migrations
                 columns: new[] { "Id", "CreatedAt", "Name" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 1, 29, 1, 37, 56, 540, DateTimeKind.Utc).AddTicks(7808), "Admin" },
-                    { 2, new DateTime(2025, 1, 29, 1, 37, 56, 540, DateTimeKind.Utc).AddTicks(7811), "User" }
+                    { 1, new DateTime(2025, 1, 30, 22, 45, 56, 216, DateTimeKind.Utc).AddTicks(6246), "Admin" },
+                    { 2, new DateTime(2025, 1, 30, 22, 45, 56, 216, DateTimeKind.Utc).AddTicks(6249), "User" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -165,9 +164,15 @@ namespace backend.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Event_UserId",
+                name: "IX_Event_CreatorId",
                 table: "Event",
-                column: "UserId");
+                column: "CreatorId");
+
+            migrationBuilder.CreateIndex(
+                name: "UQ_Event_Name",
+                table: "Event",
+                column: "Name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_EventUser_UserId",

@@ -12,8 +12,8 @@ using backend.Data;
 namespace backend.Data.Migrations
 {
     [DbContext(typeof(EventHubDbContext))]
-    [Migration("20250129013756_StartingDatabase")]
-    partial class StartingDatabase
+    [Migration("20250130224556_InitialDatabase")]
+    partial class InitialDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -120,7 +120,7 @@ namespace backend.Data.Migrations
                         .HasColumnName("CreatedAt");
 
                     b.Property<int>("CreatorId")
-                        .HasColumnType("int");
+                        .HasColumnType("INT");
 
                     b.Property<DateTime>("DateAndTime")
                         .HasColumnType("DATETIME")
@@ -151,13 +151,13 @@ namespace backend.Data.Migrations
                         .HasColumnType("DATETIME2")
                         .HasColumnName("UpdatedAt");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("INT");
-
                     b.HasKey("Id")
                         .HasName("PK_Event_Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("CreatorId");
+
+                    b.HasIndex(new[] { "Name" }, "UQ_Event_Name")
+                        .IsUnique();
 
                     b.ToTable("Event", (string)null);
                 });
@@ -193,13 +193,13 @@ namespace backend.Data.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 1, 29, 1, 37, 56, 540, DateTimeKind.Utc).AddTicks(7808),
+                            CreatedAt = new DateTime(2025, 1, 30, 22, 45, 56, 216, DateTimeKind.Utc).AddTicks(6246),
                             Name = "Admin"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 1, 29, 1, 37, 56, 540, DateTimeKind.Utc).AddTicks(7811),
+                            CreatedAt = new DateTime(2025, 1, 30, 22, 45, 56, 216, DateTimeKind.Utc).AddTicks(6249),
                             Name = "User"
                         });
                 });
@@ -298,7 +298,7 @@ namespace backend.Data.Migrations
                 {
                     b.HasOne("backend.Models.User", "Creator")
                         .WithMany("MyEvents")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("FK_Event_Creator");

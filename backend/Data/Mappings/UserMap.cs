@@ -50,13 +50,13 @@ public class UserMap : IEntityTypeConfiguration<User>
         builder
             .Property(x => x.CreatedAt)
             .HasColumnName("CreatedAt")
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME")
             .IsRequired();
 
         builder
             .Property(x => x.UpdateAt)
             .HasColumnName("UpdateAt")
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME")
             .IsRequired(false);
 
         builder
@@ -95,13 +95,5 @@ public class UserMap : IEntityTypeConfiguration<User>
                     .HasForeignKey("UserId")
                     .HasConstraintName("FK_EventUser_UserId")
                     .OnDelete(DeleteBehavior.Cascade));
-
-        builder
-            .HasMany(x => x.MyEvents)
-            .WithOne(x => x.Creator)
-            .HasForeignKey("UserId")
-            .HasConstraintName("FK_Event_Creator")
-            .OnDelete(DeleteBehavior.Restrict)
-            .IsRequired();
     }
 }

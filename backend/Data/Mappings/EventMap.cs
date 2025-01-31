@@ -28,6 +28,10 @@ public class EventMap : IEntityTypeConfiguration<Event>
             .IsRequired();
 
         builder
+            .HasIndex(x => x.Name, "UQ_Event_Name")
+            .IsUnique();
+
+        builder
             .Property(x => x.Description)
             .HasColumnName("Description")
             .HasColumnType("NVARCHAR(MAX)")
@@ -55,13 +59,13 @@ public class EventMap : IEntityTypeConfiguration<Event>
         builder
             .Property(x => x.CreatedAt)
             .HasColumnName("CreatedAt")
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME")
             .IsRequired();
 
         builder
             .Property(x => x.UpdatedAt)
             .HasColumnName("UpdatedAt")
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME")
             .IsRequired(false);
 
         builder
@@ -69,7 +73,7 @@ public class EventMap : IEntityTypeConfiguration<Event>
             .WithMany(x => x.MyEvents)
             .HasForeignKey("CreatorId")
             .HasConstraintName("FK_Event_Creator")
-            .OnDelete(DeleteBehavior.Cascade)
+            .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
     }
 }

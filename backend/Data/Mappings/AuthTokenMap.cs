@@ -52,13 +52,13 @@ public class AuthTokenMap : IEntityTypeConfiguration<AuthToken>
         builder
             .Property(x => x.CreatedAt)
             .HasColumnName("CreatedAt")
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME")
             .IsRequired();
 
         builder
             .Property(x => x.UpdatedAt)
             .HasColumnName("UpdatedAt")
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME")
             .IsRequired(false);
 
         builder

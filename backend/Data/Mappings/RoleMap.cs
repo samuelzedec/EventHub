@@ -35,7 +35,7 @@ public class RoleMap : IEntityTypeConfiguration<Role>
         builder
             .Property(x => x.CreatedAt)
             .HasColumnName("CreatedAt")
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME")
             .IsRequired();
     }
 }

@@ -1,11 +1,10 @@
 using backend.Data;
 using backend.Extensions;
-using backend.Interfaces;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repositories;
-public class UserRepository : IRepository<User>
+public class UserRepository
 {
     private readonly EventHubDbContext _context;
     public UserRepository(EventHubDbContext context)
@@ -35,13 +34,46 @@ public class UserRepository : IRepository<User>
         return model;
     }
 
+    public async Task<User?> RenewUserAccessToken(int modelId, AuthToken token)
+    {
+        var user = await _context
+            .Users
+            .Include(x => x.AuthToken)
+            .FirstOrDefaultAsync(x => x.Id == modelId);
+
+        if (user is null)
+            return null;
+
+        user.AuthToken.CopyFromAccessToken(token);
+        _context.Update(user);
+        await _context.SaveChangesAsync();
+        return user;
+    }
+
+    public async Task<User?> RenewUserRefreshToken(int modelId, AuthToken token)
+    {
+
+        var user = await _context
+            .Users
+            .Include(x => x.AuthToken)
+            .FirstOrDefaultAsync(x => x.Id == modelId);
+
+        if (user is null)
+            return null;
+        
+        user.AuthToken.CopyFromRefreshToken(token);
+        _context.Update(user);
+        await _context.SaveChangesAsync();
+        return user;
+    }
+
     public async Task<User?> UpdateAsync(int modelId, User model)
     {
         var user = await _context
             .Users
             .FirstOrDefaultAsync(x => x.Id == modelId);
 
-        if (user is null) 
+        if (user is null)
             return null;
 
         user.CopyFrom(model);
