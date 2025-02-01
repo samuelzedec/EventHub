@@ -15,7 +15,8 @@ internal class Program
 		ConfigureServices(builder);
 
 		var app = builder.Build();
-		app.Run();
+		app.MapControllers();
+		app.Run("https://localhost:8000");
 	}
 
 	private static void DatabaseSettings(

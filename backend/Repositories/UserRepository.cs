@@ -1,16 +1,17 @@
 using backend.Data;
 using backend.Extensions;
+using backend.Interfaces;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repositories;
-public class UserRepository
+public class UserRepository : IRepository<User>
 {
     private readonly EventHubDbContext _context;
     public UserRepository(EventHubDbContext context)
         => _context = context;
 
-    public async Task<List<User>> GetAllASync()
+    public async Task<List<User>> GetAllAsync()
         => await _context
             .Users
             .Include(x => x.Roles)
@@ -26,6 +27,16 @@ public class UserRepository
             .Include(x => x.Events)
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == modelId);
+    
+    public async Task<User?> GetByNameAsync(string username)
+        => await _context
+            .Users
+            .Include(x => x.AuthToken)
+            .Include(x => x.MyEvents)
+            .Include(x => x.Roles)
+            .Include(x => x.Events)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
 
     public async Task<User> InsertAsync(User model)
     {
