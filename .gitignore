@@ -22,4 +22,4 @@ rad.json
 TestResults.xml
 **/obj/
 **/bin/
-**/appsettings.json
+**/appsettings.Development.json
