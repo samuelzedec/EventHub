@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace backend.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialDatabase : Migration
+    public partial class StartingDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,7 +20,7 @@ namespace backend.Data.Migrations
                     Id = table.Column<int>(type: "INT", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "VARCHAR(255)", maxLength: 255, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false, defaultValueSql: "GETDATE()")
                 },
                 constraints: table =>
                 {
@@ -35,9 +35,10 @@ namespace backend.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Username = table.Column<string>(type: "NVARCHAR(255)", maxLength: 255, nullable: false),
                     Email = table.Column<string>(type: "NVARCHAR(255)", maxLength: 255, nullable: false),
-                    Password = table.Column<string>(type: "NVARCHAR(36)", maxLength: 36, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: false),
-                    UpdateAt = table.Column<DateTime>(type: "DATETIME2", nullable: true)
+                    Slug = table.Column<string>(type: "NVARCHAR(255)", maxLength: 255, nullable: false),
+                    Password = table.Column<string>(type: "NVARCHAR(255)", maxLength: 255, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
+                    UpdateAt = table.Column<DateTime>(type: "DATETIME", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -54,8 +55,8 @@ namespace backend.Data.Migrations
                     RefreshToken = table.Column<string>(type: "NVARCHAR(800)", maxLength: 800, nullable: false),
                     AccessTokenExpiry = table.Column<DateTime>(type: "DATETIME", nullable: false),
                     RefreshTokenExpiry = table.Column<DateTime>(type: "DATETIME", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "DATETIME", nullable: true),
                     UserId = table.Column<int>(type: "INT", nullable: false)
                 },
                 constraints: table =>
@@ -77,11 +78,12 @@ namespace backend.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "NVARCHAR(255)", maxLength: 255, nullable: false),
                     Description = table.Column<string>(type: "NVARCHAR(MAX)", nullable: false),
+                    Slug = table.Column<string>(type: "NVARCHAR(255)", maxLength: 255, nullable: false),
                     DateAndTime = table.Column<DateTime>(type: "DATETIME", nullable: false),
                     Location = table.Column<string>(type: "NVARCHAR(255)", maxLength: 255, nullable: false),
                     MaxCapacity = table.Column<int>(type: "INT", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "DATETIME", nullable: true),
                     CreatorId = table.Column<int>(type: "INT", nullable: false)
                 },
                 constraints: table =>
@@ -145,11 +147,11 @@ namespace backend.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Role",
-                columns: new[] { "Id", "CreatedAt", "Name" },
+                columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 1, 30, 22, 45, 56, 216, DateTimeKind.Utc).AddTicks(6246), "Admin" },
-                    { 2, new DateTime(2025, 1, 30, 22, 45, 56, 216, DateTimeKind.Utc).AddTicks(6249), "User" }
+                    { 1, "Admin" },
+                    { 2, "User" }
                 });
 
             migrationBuilder.CreateIndex(

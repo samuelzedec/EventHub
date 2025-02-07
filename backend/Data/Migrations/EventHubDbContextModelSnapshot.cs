@@ -72,7 +72,7 @@ namespace backend.Data.Migrations
                         .HasColumnName("AccessTokenExpiry");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("DATETIME2")
+                        .HasColumnType("DATETIME")
                         .HasColumnName("CreatedAt");
 
                     b.Property<string>("RefreshToken")
@@ -86,7 +86,7 @@ namespace backend.Data.Migrations
                         .HasColumnName("RefreshTokenExpiry");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("DATETIME2")
+                        .HasColumnType("DATETIME")
                         .HasColumnName("UpdatedAt");
 
                     b.Property<int>("UserId")
@@ -113,7 +113,7 @@ namespace backend.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("DATETIME2")
+                        .HasColumnType("DATETIME")
                         .HasColumnName("CreatedAt");
 
                     b.Property<int>("CreatorId")
@@ -144,8 +144,14 @@ namespace backend.Data.Migrations
                         .HasColumnType("NVARCHAR")
                         .HasColumnName("Name");
 
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("NVARCHAR")
+                        .HasColumnName("Slug");
+
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("DATETIME2")
+                        .HasColumnType("DATETIME")
                         .HasColumnName("UpdatedAt");
 
                     b.HasKey("Id")
@@ -169,8 +175,10 @@ namespace backend.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("DATETIME2")
-                        .HasColumnName("CreatedAt");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("DATETIME")
+                        .HasColumnName("CreatedAt")
+                        .HasDefaultValueSql("GETDATE()");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -190,13 +198,13 @@ namespace backend.Data.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 1, 30, 22, 45, 56, 216, DateTimeKind.Utc).AddTicks(6246),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Admin"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 1, 30, 22, 45, 56, 216, DateTimeKind.Utc).AddTicks(6249),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "User"
                         });
                 });
@@ -211,7 +219,7 @@ namespace backend.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("DATETIME2")
+                        .HasColumnType("DATETIME")
                         .HasColumnName("CreatedAt");
 
                     b.Property<string>("Email")
@@ -222,12 +230,18 @@ namespace backend.Data.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(255)
                         .HasColumnType("NVARCHAR")
                         .HasColumnName("Password");
 
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("NVARCHAR")
+                        .HasColumnName("Slug");
+
                     b.Property<DateTime?>("UpdateAt")
-                        .HasColumnType("DATETIME2")
+                        .HasColumnType("DATETIME")
                         .HasColumnName("UpdateAt");
 
                     b.Property<string>("Username")

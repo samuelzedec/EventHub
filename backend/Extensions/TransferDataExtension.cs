@@ -1,4 +1,5 @@
 using backend.Models;
+using backend.ViewModels.Account;
 
 namespace backend.Extensions;
 public static class TransferData
@@ -33,5 +34,12 @@ public static class TransferData
         target.Location = source.Location;
         target.MaxCapacity = source.MaxCapacity;
         target.UpdatedAt = DateTime.Now;
+    }
+    public static void CopyFrom(this AccountDetailsViewModel target, User source)
+    {
+        target.Id = source.Id;
+        target.Username = source.Username;
+        target.Slug = source.Slug;
+        target.Email = source.Email;
     }
 }

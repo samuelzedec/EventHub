@@ -9,6 +9,7 @@ public class EventHubDbContext : DbContext
      * ======================================================= */
     public EventHubDbContext(DbContextOptions<EventHubDbContext> options)
         : base(options) {}
+    public EventHubDbContext() {}
 
     public DbSet<AuthToken> AuthTokens { get; set; } = null!;
     public DbSet<Event> Events { get; set; } = null!;
@@ -24,8 +25,8 @@ public class EventHubDbContext : DbContext
         
         // Criando uma seeder
         modelBuilder.Entity<Role>().HasData(
-            new Role { Id = 1, Name = "Admin", CreatedAt = DateTime.Now },
-            new Role { Id = 2, Name = "User", CreatedAt = DateTime.Now }
+            new Role { Id = 1, Name = "Admin" },
+            new Role { Id = 2, Name = "User" }
         );
     }
 }

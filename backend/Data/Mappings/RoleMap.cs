@@ -36,6 +36,6 @@ public class RoleMap : IEntityTypeConfiguration<Role>
             .Property(x => x.CreatedAt)
             .HasColumnName("CreatedAt")
             .HasColumnType("DATETIME")
-            .IsRequired();
+            .HasDefaultValueSql("GETDATE()");
     }
 }

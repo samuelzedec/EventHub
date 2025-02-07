@@ -27,6 +27,12 @@ public class UserRepository : IRepository<User>
             .Include(x => x.Events)
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == modelId);
+
+    public async Task<Role> GetRoleByNameAsync(string name)
+        => await _context
+            .Roles
+            .FirstOrDefaultAsync(x => x.Name == name)
+            ?? new Role();
     
     public async Task<User?> GetByNameAsync(string username)
         => await _context

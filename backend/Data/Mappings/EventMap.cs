@@ -36,6 +36,13 @@ public class EventMap : IEntityTypeConfiguration<Event>
             .HasColumnName("Description")
             .HasColumnType("NVARCHAR(MAX)")
             .IsRequired();
+        
+        builder
+            .Property(x => x.Slug)
+            .HasColumnName("Slug")
+            .HasColumnType("NVARCHAR")
+            .HasMaxLength(255)
+            .IsRequired();
 
         builder
             .Property(x => x.DateAndTime)

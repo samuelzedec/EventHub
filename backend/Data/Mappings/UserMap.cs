@@ -34,6 +34,13 @@ public class UserMap : IEntityTypeConfiguration<User>
             .HasColumnType("NVARCHAR")
             .HasMaxLength(255)
             .IsRequired();
+        
+        builder
+            .Property(x => x.Slug)
+            .HasColumnName("Slug")
+            .HasColumnType("NVARCHAR")
+            .HasMaxLength(255)
+            .IsRequired();
 
         builder
             .HasIndex(x => x.Email, "IX_User_Email")
@@ -43,7 +50,7 @@ public class UserMap : IEntityTypeConfiguration<User>
             .Property(x => x.Password)
             .HasColumnName("Password")
             .HasColumnType("NVARCHAR")
-            .HasMaxLength(36)
+            .HasMaxLength(255)
             .IsRequired();
 
 
