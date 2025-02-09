@@ -67,7 +67,7 @@ public class EventMap : IEntityTypeConfiguration<Event>
             .Property(x => x.CreatedAt)
             .HasColumnName("CreatedAt")
             .HasColumnType("DATETIME2")
-            .HasDefaultValue(DateTime.Now);
+            .IsRequired();
 
         builder
             .Property(x => x.UpdatedAt)

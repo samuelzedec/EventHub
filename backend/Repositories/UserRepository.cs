@@ -42,7 +42,8 @@ public class UserRepository : IRepository<User>
             .Include(x => x.Roles)
             .Include(x => x.Events)
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
+            .FirstOrDefaultAsync(x => x.Email.ToLower() == email.ToLower());
+
 
     public async Task<User> InsertAsync(User model)
     {

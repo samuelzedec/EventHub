@@ -45,6 +45,7 @@ public class AccountService
             Email = model.Email,
             Slug = slug,
             Password = hash,
+            CreatedAt = DateTime.Now,
             Roles = [role]
         };
 

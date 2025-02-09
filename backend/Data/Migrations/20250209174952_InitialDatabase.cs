@@ -20,7 +20,7 @@ namespace backend.Data.Migrations
                     Id = table.Column<int>(type: "INT", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "VARCHAR(255)", maxLength: 255, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: false, defaultValue: new DateTime(2025, 2, 8, 19, 55, 49, 570, DateTimeKind.Local).AddTicks(5131))
+                    CreatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -38,7 +38,7 @@ namespace backend.Data.Migrations
                     Slug = table.Column<string>(type: "NVARCHAR(255)", maxLength: 255, nullable: false),
                     Password = table.Column<string>(type: "NVARCHAR(255)", maxLength: 255, nullable: false),
                     IsEmailVerified = table.Column<bool>(type: "BIT", nullable: false, defaultValue: false),
-                    CreatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: false, defaultValue: new DateTime(2025, 2, 8, 19, 55, 49, 570, DateTimeKind.Local).AddTicks(7332)),
+                    CreatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: false),
                     UpdateAt = table.Column<DateTime>(type: "DATETIME2", nullable: true)
                 },
                 constraints: table =>
@@ -54,7 +54,7 @@ namespace backend.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserEmail = table.Column<string>(type: "NVARCHAR(255)", maxLength: 255, nullable: false),
                     Code = table.Column<int>(type: "INT", nullable: false),
-                    Duration = table.Column<DateTime>(type: "DATETIME2", nullable: false, defaultValue: new DateTime(2025, 2, 8, 20, 55, 49, 573, DateTimeKind.Local).AddTicks(8962))
+                    Duration = table.Column<DateTime>(type: "DATETIME2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -98,7 +98,7 @@ namespace backend.Data.Migrations
                     DateAndTime = table.Column<DateTime>(type: "DATETIME2", nullable: false),
                     Location = table.Column<string>(type: "NVARCHAR(255)", maxLength: 255, nullable: false),
                     MaxCapacity = table.Column<int>(type: "INT", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: false, defaultValue: new DateTime(2025, 2, 8, 19, 55, 49, 567, DateTimeKind.Local).AddTicks(4426)),
+                    CreatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: true),
                     CreatorId = table.Column<int>(type: "INT", nullable: false)
                 },
@@ -163,11 +163,11 @@ namespace backend.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Role",
-                columns: new[] { "Id", "Name" },
+                columns: new[] { "Id", "CreatedAt", "Name" },
                 values: new object[,]
                 {
-                    { 1, "Admin" },
-                    { 2, "User" }
+                    { 1, new DateTime(2025, 2, 9, 13, 49, 52, 47, DateTimeKind.Local).AddTicks(5454), "Admin" },
+                    { 2, new DateTime(2025, 2, 9, 13, 49, 52, 47, DateTimeKind.Local).AddTicks(5491), "User" }
                 });
 
             migrationBuilder.CreateIndex(

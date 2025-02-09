@@ -21,6 +21,7 @@ public class CheckingEmailService
 		{
 			Code = code,
 			UserEmail = userEmail,
+			Duration = DateTime.Now.AddHours(1)
 		});
 
 		return code;

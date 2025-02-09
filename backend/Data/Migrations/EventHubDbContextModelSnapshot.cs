@@ -113,9 +113,7 @@ namespace backend.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("DATETIME2")
-                        .HasDefaultValue(new DateTime(2025, 2, 8, 19, 55, 49, 567, DateTimeKind.Local).AddTicks(4426))
                         .HasColumnName("CreatedAt");
 
                     b.Property<int>("CreatorId")
@@ -177,9 +175,7 @@ namespace backend.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("DATETIME2")
-                        .HasDefaultValue(new DateTime(2025, 2, 8, 19, 55, 49, 570, DateTimeKind.Local).AddTicks(5131))
                         .HasColumnName("CreatedAt");
 
                     b.Property<string>("Name")
@@ -200,13 +196,13 @@ namespace backend.Data.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2025, 2, 9, 13, 49, 52, 47, DateTimeKind.Local).AddTicks(5454),
                             Name = "Admin"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2025, 2, 9, 13, 49, 52, 47, DateTimeKind.Local).AddTicks(5491),
                             Name = "User"
                         });
                 });
@@ -221,9 +217,7 @@ namespace backend.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("DATETIME2")
-                        .HasDefaultValue(new DateTime(2025, 2, 8, 19, 55, 49, 570, DateTimeKind.Local).AddTicks(7332))
                         .HasColumnName("CreatedAt");
 
                     b.Property<string>("Email")
@@ -283,9 +277,7 @@ namespace backend.Data.Migrations
                         .HasColumnName("Code");
 
                     b.Property<DateTime>("Duration")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("DATETIME2")
-                        .HasDefaultValue(new DateTime(2025, 2, 8, 20, 55, 49, 573, DateTimeKind.Local).AddTicks(8962))
                         .HasColumnName("Duration");
 
                     b.Property<string>("UserEmail")

@@ -32,8 +32,7 @@ public class EventRepository : IRepository<Event>
             .Include(x => x.Creator)
             .Include(x => x.Users)
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Name.Equals(eventName, StringComparison.OrdinalIgnoreCase));
-
+            .FirstOrDefaultAsync(x => x.Name.ToLower() == eventName.ToLower());
     public async Task<Event> InsertAsync(Event model)
     {
         await _context.Events.AddAsync(model);

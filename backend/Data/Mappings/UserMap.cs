@@ -63,7 +63,7 @@ public class UserMap : IEntityTypeConfiguration<User>
             .Property(x => x.CreatedAt)
             .HasColumnName("CreatedAt")
             .HasColumnType("DATETIME2")
-            .HasDefaultValue(DateTime.Now);
+            .IsRequired();
 
         builder
             .Property(x => x.UpdateAt)

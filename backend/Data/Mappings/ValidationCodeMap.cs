@@ -41,6 +41,6 @@ public class VerificationCodeMap : IEntityTypeConfiguration<VerificationCode>
             .Property(x => x.Duration)
             .HasColumnName("Duration")
             .HasColumnType("DATETIME2")
-            .HasDefaultValue(DateTime.Now.AddHours(1));
+            .IsRequired();
     }
 }
