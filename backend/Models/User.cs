@@ -6,6 +6,7 @@ public class User
     public string Email { get; set; } = string.Empty;
     public string Slug { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
+    public bool IsEmailVerified { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdateAt { get; set; }
     public AuthToken AuthToken { get; set; } = null!;

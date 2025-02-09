@@ -18,7 +18,7 @@ public class AccountController : ControllerBase
     public async Task<IActionResult> RegisterAccount(
         [FromBody] EditorAccountViewModel data) 
     {
-        if(!ModelState.IsValid)
+        if (!ModelState.IsValid)
             return BadRequest(new ResultViewModel<User>(ModelState.GetErrors()));
 
         var (code, model) = await _service.CreateAccountAsync(data);
@@ -26,6 +26,7 @@ public class AccountController : ControllerBase
         {
             201 => Created($"/account/register/{model.Data?.Id}", model),
             400 => BadRequest(model),
+            409 => Conflict(model),
             _ => StatusCode(500, model)
         };
     }
@@ -33,6 +34,7 @@ public class AccountController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> LoginAsync() 
     {
+
         return Ok();
     }        
 }

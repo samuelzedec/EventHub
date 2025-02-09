@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace backend.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class StartingDatabase : Migration
+    public partial class InitialDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,7 +20,7 @@ namespace backend.Data.Migrations
                     Id = table.Column<int>(type: "INT", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "VARCHAR(255)", maxLength: 255, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false, defaultValueSql: "GETDATE()")
+                    CreatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: false, defaultValue: new DateTime(2025, 2, 8, 19, 55, 49, 570, DateTimeKind.Local).AddTicks(5131))
                 },
                 constraints: table =>
                 {
@@ -37,12 +37,28 @@ namespace backend.Data.Migrations
                     Email = table.Column<string>(type: "NVARCHAR(255)", maxLength: 255, nullable: false),
                     Slug = table.Column<string>(type: "NVARCHAR(255)", maxLength: 255, nullable: false),
                     Password = table.Column<string>(type: "NVARCHAR(255)", maxLength: 255, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
-                    UpdateAt = table.Column<DateTime>(type: "DATETIME", nullable: true)
+                    IsEmailVerified = table.Column<bool>(type: "BIT", nullable: false, defaultValue: false),
+                    CreatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: false, defaultValue: new DateTime(2025, 2, 8, 19, 55, 49, 570, DateTimeKind.Local).AddTicks(7332)),
+                    UpdateAt = table.Column<DateTime>(type: "DATETIME2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User_Id", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "VerificationCode",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INT", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserEmail = table.Column<string>(type: "NVARCHAR(255)", maxLength: 255, nullable: false),
+                    Code = table.Column<int>(type: "INT", nullable: false),
+                    Duration = table.Column<DateTime>(type: "DATETIME2", nullable: false, defaultValue: new DateTime(2025, 2, 8, 20, 55, 49, 573, DateTimeKind.Local).AddTicks(8962))
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VerificationCode_Id", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -53,10 +69,10 @@ namespace backend.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AccessToken = table.Column<string>(type: "NVARCHAR(800)", maxLength: 800, nullable: false),
                     RefreshToken = table.Column<string>(type: "NVARCHAR(800)", maxLength: 800, nullable: false),
-                    AccessTokenExpiry = table.Column<DateTime>(type: "DATETIME", nullable: false),
-                    RefreshTokenExpiry = table.Column<DateTime>(type: "DATETIME", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "DATETIME", nullable: true),
+                    AccessTokenExpiry = table.Column<DateTime>(type: "DATETIME2", nullable: false),
+                    RefreshTokenExpiry = table.Column<DateTime>(type: "DATETIME2", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: true),
                     UserId = table.Column<int>(type: "INT", nullable: false)
                 },
                 constraints: table =>
@@ -79,11 +95,11 @@ namespace backend.Data.Migrations
                     Name = table.Column<string>(type: "NVARCHAR(255)", maxLength: 255, nullable: false),
                     Description = table.Column<string>(type: "NVARCHAR(MAX)", nullable: false),
                     Slug = table.Column<string>(type: "NVARCHAR(255)", maxLength: 255, nullable: false),
-                    DateAndTime = table.Column<DateTime>(type: "DATETIME", nullable: false),
+                    DateAndTime = table.Column<DateTime>(type: "DATETIME2", nullable: false),
                     Location = table.Column<string>(type: "NVARCHAR(255)", maxLength: 255, nullable: false),
                     MaxCapacity = table.Column<int>(type: "INT", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "DATETIME", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: false, defaultValue: new DateTime(2025, 2, 8, 19, 55, 49, 567, DateTimeKind.Local).AddTicks(4426)),
+                    UpdatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: true),
                     CreatorId = table.Column<int>(type: "INT", nullable: false)
                 },
                 constraints: table =>
@@ -193,9 +209,15 @@ namespace backend.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_Email",
+                name: "UQ_User_Email",
                 table: "User",
                 column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "UQ_VerificationCode_UserEmail",
+                table: "VerificationCode",
+                column: "UserEmail",
                 unique: true);
         }
 
@@ -210,6 +232,9 @@ namespace backend.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "RoleUser");
+
+            migrationBuilder.DropTable(
+                name: "VerificationCode");
 
             migrationBuilder.DropTable(
                 name: "Event");

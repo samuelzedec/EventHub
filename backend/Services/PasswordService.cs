@@ -4,9 +4,9 @@ namespace backend.Services;
 
 public class PasswordService
 {
-    public (string, string) GenerateHash()
+    public string GenerateHash()
     {
         var password = PasswordGenerator.Generate(25, true, false);
-        return (password, PasswordHasher.Hash(password));
+        return PasswordHasher.Hash(password);
     }
 }

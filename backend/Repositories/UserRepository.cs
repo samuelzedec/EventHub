@@ -34,7 +34,7 @@ public class UserRepository : IRepository<User>
             .FirstOrDefaultAsync(x => x.Name == name)
             ?? new Role();
     
-    public async Task<User?> GetByNameAsync(string username)
+    public async Task<User?> GetByEmailAsync(string email)
         => await _context
             .Users
             .Include(x => x.AuthToken)
@@ -42,7 +42,7 @@ public class UserRepository : IRepository<User>
             .Include(x => x.Roles)
             .Include(x => x.Events)
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+            .FirstOrDefaultAsync(x => x.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
 
     public async Task<User> InsertAsync(User model)
     {

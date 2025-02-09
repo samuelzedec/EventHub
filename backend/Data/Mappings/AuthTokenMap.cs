@@ -33,7 +33,7 @@ public class AuthTokenMap : IEntityTypeConfiguration<AuthToken>
         builder
             .Property(x => x.AccessTokenExpiry)
             .HasColumnName("AccessTokenExpiry")
-            .HasColumnType("DATETIME")
+            .HasColumnType("DATETIME2")
             .IsRequired();
 
         builder
@@ -46,19 +46,19 @@ public class AuthTokenMap : IEntityTypeConfiguration<AuthToken>
         builder
             .Property(x => x.RefreshTokenExpiry)
             .HasColumnName("RefreshTokenExpiry")
-            .HasColumnType("DATETIME")
+            .HasColumnType("DATETIME2")
             .IsRequired();
 
         builder
             .Property(x => x.CreatedAt)
             .HasColumnName("CreatedAt")
-            .HasColumnType("DATETIME")
+            .HasColumnType("DATETIME2")
             .IsRequired();
 
         builder
             .Property(x => x.UpdatedAt)
             .HasColumnName("UpdatedAt")
-            .HasColumnType("DATETIME")
+            .HasColumnType("DATETIME2")
             .IsRequired(false);
 
         builder

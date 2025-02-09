@@ -12,8 +12,8 @@ using backend.Data;
 namespace backend.Data.Migrations
 {
     [DbContext(typeof(EventHubDbContext))]
-    [Migration("20250207012656_StartingDatabase")]
-    partial class StartingDatabase
+    [Migration("20250208235549_InitialDatabase")]
+    partial class InitialDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -71,11 +71,11 @@ namespace backend.Data.Migrations
                         .HasColumnName("AccessToken");
 
                     b.Property<DateTime>("AccessTokenExpiry")
-                        .HasColumnType("DATETIME")
+                        .HasColumnType("DATETIME2")
                         .HasColumnName("AccessTokenExpiry");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("DATETIME")
+                        .HasColumnType("DATETIME2")
                         .HasColumnName("CreatedAt");
 
                     b.Property<string>("RefreshToken")
@@ -85,11 +85,11 @@ namespace backend.Data.Migrations
                         .HasColumnName("RefreshToken");
 
                     b.Property<DateTime>("RefreshTokenExpiry")
-                        .HasColumnType("DATETIME")
+                        .HasColumnType("DATETIME2")
                         .HasColumnName("RefreshTokenExpiry");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("DATETIME")
+                        .HasColumnType("DATETIME2")
                         .HasColumnName("UpdatedAt");
 
                     b.Property<int>("UserId")
@@ -116,14 +116,16 @@ namespace backend.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("DATETIME")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("DATETIME2")
+                        .HasDefaultValue(new DateTime(2025, 2, 8, 19, 55, 49, 567, DateTimeKind.Local).AddTicks(4426))
                         .HasColumnName("CreatedAt");
 
                     b.Property<int>("CreatorId")
                         .HasColumnType("INT");
 
                     b.Property<DateTime>("DateAndTime")
-                        .HasColumnType("DATETIME")
+                        .HasColumnType("DATETIME2")
                         .HasColumnName("DateAndTime");
 
                     b.Property<string>("Description")
@@ -154,7 +156,7 @@ namespace backend.Data.Migrations
                         .HasColumnName("Slug");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("DATETIME")
+                        .HasColumnType("DATETIME2")
                         .HasColumnName("UpdatedAt");
 
                     b.HasKey("Id")
@@ -179,9 +181,9 @@ namespace backend.Data.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("DATETIME")
-                        .HasColumnName("CreatedAt")
-                        .HasDefaultValueSql("GETDATE()");
+                        .HasColumnType("DATETIME2")
+                        .HasDefaultValue(new DateTime(2025, 2, 8, 19, 55, 49, 570, DateTimeKind.Local).AddTicks(5131))
+                        .HasColumnName("CreatedAt");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -222,7 +224,9 @@ namespace backend.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("DATETIME")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("DATETIME2")
+                        .HasDefaultValue(new DateTime(2025, 2, 8, 19, 55, 49, 570, DateTimeKind.Local).AddTicks(7332))
                         .HasColumnName("CreatedAt");
 
                     b.Property<string>("Email")
@@ -230,6 +234,12 @@ namespace backend.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("NVARCHAR")
                         .HasColumnName("Email");
+
+                    b.Property<bool>("IsEmailVerified")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("BIT")
+                        .HasDefaultValue(false)
+                        .HasColumnName("IsEmailVerified");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -244,7 +254,7 @@ namespace backend.Data.Migrations
                         .HasColumnName("Slug");
 
                     b.Property<DateTime?>("UpdateAt")
-                        .HasColumnType("DATETIME")
+                        .HasColumnType("DATETIME2")
                         .HasColumnName("UpdateAt");
 
                     b.Property<string>("Username")
@@ -256,10 +266,44 @@ namespace backend.Data.Migrations
                     b.HasKey("Id")
                         .HasName("PK_User_Id");
 
-                    b.HasIndex(new[] { "Email" }, "IX_User_Email")
+                    b.HasIndex(new[] { "Email" }, "UQ_User_Email")
                         .IsUnique();
 
                     b.ToTable("User", (string)null);
+                });
+
+            modelBuilder.Entity("backend.Models.VerificationCode", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INT")
+                        .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Code")
+                        .HasColumnType("INT")
+                        .HasColumnName("Code");
+
+                    b.Property<DateTime>("Duration")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("DATETIME2")
+                        .HasDefaultValue(new DateTime(2025, 2, 8, 20, 55, 49, 573, DateTimeKind.Local).AddTicks(8962))
+                        .HasColumnName("Duration");
+
+                    b.Property<string>("UserEmail")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("NVARCHAR")
+                        .HasColumnName("UserEmail");
+
+                    b.HasKey("Id")
+                        .HasName("PK_VerificationCode_Id");
+
+                    b.HasIndex(new[] { "UserEmail" }, "UQ_VerificationCode_UserEmail")
+                        .IsUnique();
+
+                    b.ToTable("VerificationCode", (string)null);
                 });
 
             modelBuilder.Entity("EventUser", b =>

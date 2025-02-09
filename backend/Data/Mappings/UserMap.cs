@@ -43,7 +43,7 @@ public class UserMap : IEntityTypeConfiguration<User>
             .IsRequired();
 
         builder
-            .HasIndex(x => x.Email, "IX_User_Email")
+            .HasIndex(x => x.Email, "UQ_User_Email")
             .IsUnique();
 
         builder
@@ -53,17 +53,22 @@ public class UserMap : IEntityTypeConfiguration<User>
             .HasMaxLength(255)
             .IsRequired();
 
+        builder
+            .Property(x => x.IsEmailVerified)
+            .HasColumnName("IsEmailVerified")
+            .HasColumnType("BIT")
+            .HasDefaultValue(false);
 
         builder
             .Property(x => x.CreatedAt)
             .HasColumnName("CreatedAt")
-            .HasColumnType("DATETIME")
-            .IsRequired();
+            .HasColumnType("DATETIME2")
+            .HasDefaultValue(DateTime.Now);
 
         builder
             .Property(x => x.UpdateAt)
             .HasColumnName("UpdateAt")
-            .HasColumnType("DATETIME")
+            .HasColumnType("DATETIME2")
             .IsRequired(false);
 
         builder

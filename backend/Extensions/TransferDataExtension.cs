@@ -1,4 +1,5 @@
 using backend.Models;
+using backend.ViewModels;
 using backend.ViewModels.Account;
 
 namespace backend.Extensions;
@@ -41,5 +42,12 @@ public static class TransferData
         target.Username = source.Username;
         target.Slug = source.Slug;
         target.Email = source.Email;
+    }
+
+    public static void CopyFrom(this VerificationCode target, VerificationCode source)
+    {
+        target.UserEmail = source.UserEmail;
+        target.Code = source.Code;
+        target.Duration = source.Duration;
     }
 }

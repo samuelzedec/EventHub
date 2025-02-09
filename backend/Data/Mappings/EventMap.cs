@@ -47,7 +47,7 @@ public class EventMap : IEntityTypeConfiguration<Event>
         builder
             .Property(x => x.DateAndTime)
             .HasColumnName("DateAndTime")
-            .HasColumnType("DATETIME")
+            .HasColumnType("DATETIME2")
             .IsRequired();
 
         builder
@@ -66,13 +66,13 @@ public class EventMap : IEntityTypeConfiguration<Event>
         builder
             .Property(x => x.CreatedAt)
             .HasColumnName("CreatedAt")
-            .HasColumnType("DATETIME")
-            .IsRequired();
+            .HasColumnType("DATETIME2")
+            .HasDefaultValue(DateTime.Now);
 
         builder
             .Property(x => x.UpdatedAt)
             .HasColumnName("UpdatedAt")
-            .HasColumnType("DATETIME")
+            .HasColumnType("DATETIME2")
             .IsRequired(false);
 
         builder
