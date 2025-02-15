@@ -12,8 +12,8 @@ using backend.Data;
 namespace backend.Data.Migrations
 {
     [DbContext(typeof(EventHubDbContext))]
-    [Migration("20250209174952_InitialDatabase")]
-    partial class InitialDatabase
+    [Migration("20250215174151_StartingDatabase")]
+    partial class StartingDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -199,13 +199,13 @@ namespace backend.Data.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 2, 9, 13, 49, 52, 47, DateTimeKind.Local).AddTicks(5454),
+                            CreatedAt = new DateTime(2025, 2, 15, 13, 41, 50, 960, DateTimeKind.Local).AddTicks(638),
                             Name = "Admin"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 2, 9, 13, 49, 52, 47, DateTimeKind.Local).AddTicks(5491),
+                            CreatedAt = new DateTime(2025, 2, 15, 13, 41, 50, 960, DateTimeKind.Local).AddTicks(684),
                             Name = "User"
                         });
                 });

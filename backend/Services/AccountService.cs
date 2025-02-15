@@ -1,5 +1,6 @@
 using backend.Exceptions;
 using backend.Extensions;
+using backend.Interfaces;
 using backend.Models;
 using backend.Repositories;
 using backend.ViewModels;
@@ -8,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 namespace backend.Services;
 
-public class AccountService
+public class AccountService : IAccountService
 {
     private readonly UserRepository _repository;
     private readonly PasswordService _passwordService;
@@ -33,18 +34,12 @@ public class AccountService
     public async Task<(int, ResultViewModel<AccountDetailsViewModel>)> CreateAccountAsync(
         EditorAccountViewModel model)
     {
-        var role = await _repository.GetRoleByNameAsync("User");        
-        var hash = _passwordService.GenerateHash();
-        var slug = string.IsNullOrWhiteSpace(model.Slug)
-            ? string.Concat(model.Email.TakeWhile(x => x != '@')) + $"{new Random(Guid.NewGuid().GetHashCode()).Next(10000, 100000)}"
-            : model.Slug;
-
+        var role = await _repository.GetRoleByNameAsync("User");
         var newAccount = new User
         {
             Username = model.Username,
             Email = model.Email,
-            Slug = slug,
-            Password = hash,
+            Slug = GenerateSlug(model.Email, model.Slug),
             CreatedAt = DateTime.Now,
             Roles = [role]
         };
@@ -60,13 +55,9 @@ public class AccountService
                 account.Username,
                 account.Email,
                 "Código de Verificação",
-                _emailService.HtmlForEmailVerification(account.Username, verificationCode, _originAllowed));
+                _emailService.HtmlForEmailVerification(account.Username, $"{_originAllowed}/validation-page?email={account.Email}&code={verificationCode}"));
 
             return (201, new ResultViewModel<AccountDetailsViewModel>(accountDetails));
-        }
-        catch (DbUpdateException ex) when (ex.Message.Contains("UNIQUE KEY"))
-        {
-            return (400, new ResultViewModel<AccountDetailsViewModel>("E-mail já está cadastrado!"));
         }
         catch (ConflictException ex)
         {
@@ -78,12 +69,52 @@ public class AccountService
         }
         catch (DbUpdateException)
         {
-            return (500, new ResultViewModel<AccountDetailsViewModel>("Erro ao inserir dados no banco de dados!"));
+            return (500, new ResultViewModel<AccountDetailsViewModel>("E-mail já está cadastrado!"));
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            Console.WriteLine(ex);
             return (500, new ResultViewModel<AccountDetailsViewModel>("Erro interno servidor!"));
         }
+    }
+
+    private string GenerateSlug(string email, string? providedSlug)
+    {
+        if (!string.IsNullOrWhiteSpace(providedSlug))
+            return providedSlug;
+
+        return string.Concat(email.TakeWhile(x => x != '@')) +
+            $"{new Random(Guid.NewGuid().GetHashCode()).Next(10000, 100000)}";
+    }
+
+    public async Task<(int, ResultViewModel<string>)> ValidatingTheEmailCode(string email, int code)
+    {
+        var repository = await _repository.GetByEmailAsync(email);
+        var (password, hash) = _passwordService.GenerateHash();
+
+        if (repository == null)
+            return (404, new ResultViewModel<string>(["Email não encontrado!"]));
+
+        if(repository.IsEmailVerified)
+            return (200, new ResultViewModel<string>("Email já está verificado"));
+
+        var (message, result) = await _checkingEmailService.Validation(email, code);
+
+        if (result)
+        {
+            repository.IsEmailVerified = true;
+            repository.Password = hash;
+            await _repository.UpdateAsync(repository.Id, repository);
+            _emailService.Send(
+                repository.Username,
+                repository.Email,
+                "Senha de Acesso",
+                _emailService.HtmlForEmail(repository.Username, password));
+            return (200, new ResultViewModel<string>([message]));
+        }
+
+        if (message.Contains("Email"))
+            return (404, new ResultViewModel<string>([message]));
+
+        return (422, new ResultViewModel<string>([message]));
     }
 }

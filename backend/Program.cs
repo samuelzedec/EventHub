@@ -78,7 +78,7 @@ internal class Program
 	}
 
 	private static void ConfigureAuthentication(WebApplicationBuilder builder)
-	{	
+	{
 		var jwtSettings = builder
 			.Configuration
 			.GetSection("JwtSettings")

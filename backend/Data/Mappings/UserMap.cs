@@ -50,9 +50,8 @@ public class UserMap : IEntityTypeConfiguration<User>
             .Property(x => x.Password)
             .HasColumnName("Password")
             .HasColumnType("NVARCHAR")
-            .HasMaxLength(255)
-            .IsRequired();
-
+            .HasMaxLength(255);
+        
         builder
             .Property(x => x.IsEmailVerified)
             .HasColumnName("IsEmailVerified")

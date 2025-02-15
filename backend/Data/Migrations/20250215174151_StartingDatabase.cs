@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace backend.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialDatabase : Migration
+    public partial class StartingDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -166,8 +166,8 @@ namespace backend.Data.Migrations
                 columns: new[] { "Id", "CreatedAt", "Name" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 2, 9, 13, 49, 52, 47, DateTimeKind.Local).AddTicks(5454), "Admin" },
-                    { 2, new DateTime(2025, 2, 9, 13, 49, 52, 47, DateTimeKind.Local).AddTicks(5491), "User" }
+                    { 1, new DateTime(2025, 2, 15, 13, 41, 50, 960, DateTimeKind.Local).AddTicks(638), "Admin" },
+                    { 2, new DateTime(2025, 2, 15, 13, 41, 50, 960, DateTimeKind.Local).AddTicks(684), "User" }
                 });
 
             migrationBuilder.CreateIndex(

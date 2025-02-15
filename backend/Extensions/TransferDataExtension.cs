@@ -11,6 +11,7 @@ public static class TransferData
         target.Email = source.Email;
         target.Password = source.Password;
         target.UpdateAt = DateTime.UtcNow;
+        target.IsEmailVerified = source.IsEmailVerified;
     }
 
     public static void CopyFromAccessToken(this AuthToken target, AuthToken source)

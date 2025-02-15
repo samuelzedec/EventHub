@@ -92,8 +92,8 @@ GO
 IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'CreatedAt', N'Name') AND [object_id] = OBJECT_ID(N'[Role]'))
     SET IDENTITY_INSERT [Role] ON;
 INSERT INTO [Role] ([Id], [CreatedAt], [Name])
-VALUES (1, '2025-02-09T13:48:04.7614003-04:00', 'Admin'),
-(2, '2025-02-09T13:48:04.7614037-04:00', 'User');
+VALUES (1, '2025-02-15T13:41:50.9600638-04:00', 'Admin'),
+(2, '2025-02-15T13:41:50.9600684-04:00', 'User');
 IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'CreatedAt', N'Name') AND [object_id] = OBJECT_ID(N'[Role]'))
     SET IDENTITY_INSERT [Role] OFF;
 GO
@@ -126,7 +126,7 @@ CREATE UNIQUE INDEX [UQ_VerificationCode_UserEmail] ON [VerificationCode] ([User
 GO
 
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-VALUES (N'20250209174805_InitialDatabase', N'8.0.1');
+VALUES (N'20250215174151_StartingDatabase', N'8.0.1');
 GO
 
 COMMIT;

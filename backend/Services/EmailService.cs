@@ -6,9 +6,9 @@ namespace backend.Services;
 public class EmailService
 {
     private readonly SmtpSettings _smtpSettings;
-    public EmailService(IOptions<SmtpSettings> smtpSettingd)
+    public EmailService(IOptions<SmtpSettings> smtpSettingd, ILogger<EmailService> logger)
         => _smtpSettings = smtpSettingd.Value;
-
+    
     public bool Send(
         string toName,
         string toEmail,
@@ -36,9 +36,8 @@ public class EmailService
             smtpClient.Send(mail);
             return true;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            Console.WriteLine(ex);
             return false;
         }
     }
@@ -118,7 +117,7 @@ public class EmailService
         ";
     }
 
-    public string HtmlForEmailVerification(string name, int verificationCode, string verificationLink)
+    public string HtmlForEmailVerification(string name, string verificationLink)
     {
         return $@"
             <!DOCTYPE html>
@@ -159,15 +158,6 @@ public class EmailService
                         padding: 20px;
                         text-align: center;
                     }}
-                    .verification-code {{
-                        font-size: 22px;
-                        font-weight: bold;
-                        color: #007bff;
-                        margin-top: 20px;
-                        padding: 10px;
-                        background-color: #f0f8ff;
-                        border-radius: 5px;
-                    }}
                     .verify-button {{
                         display: inline-block;
                         margin-top: 20px;
@@ -197,10 +187,9 @@ public class EmailService
                     </div>
                     <div class=""content"">
                         <p>Olá, {name}!</p>
-                        <p>Para concluir seu cadastro, insira o código de verificação abaixo ou clique no botão:</p>
-                        <p class=""verification-code"">{verificationCode}</p>
+                        <p>Para concluir seu cadastro, clique no botão abaixo:</p>
                         <a href=""{verificationLink}"" class=""verify-button"">Verificar E-mail</a>
-                        <p>Este código é válido por 1 hora. Caso não tenha solicitado, por favor, ignore este e-mail.</p>
+                        <p>Se você não solicitou este e-mail, pode ignorá-lo com segurança.</p>
                     </div>
                     <div class=""footer"">
                         <p>&copy; 2025 EventHub. Todos os direitos reservados.</p>
@@ -209,6 +198,5 @@ public class EmailService
             </body>
             </html>
         ";
-}
-
+    }
 }
