@@ -24,3 +24,4 @@ TestResults.xml
 **/obj/
 **/bin/
 **/appsettings.Development.json
+**/logs/
