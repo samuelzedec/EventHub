@@ -1,4 +1,3 @@
-using backend.Exceptions;
 using backend.Models;
 using backend.Repositories;
 
@@ -17,7 +16,10 @@ public class CheckingEmailService
 		var code = new Random(Guid.NewGuid().GetHashCode()).Next(100000, 1000000);
 
 		if (verificationByUserEmail is not null)
-			throw new ConflictException("E-mail já está em uso. Faça login para acessar!");
+		{
+			verificationByUserEmail.Code = code;
+			return code;
+		}
 
 		await _repository.InsertAsync(new VerificationCode
 		{
@@ -29,17 +31,35 @@ public class CheckingEmailService
 		return code;
 	}
 
-	public async Task<(string, bool)> Validation(string userEmail, int code)
+	public async Task<(int, bool)> RegenerationCodeAsync(string userEmail)
 	{
 		var verificationByUserEmail = await _repository
 			.GetVerificationCodeByUserEmailAsync(userEmail);
 		
-		if(verificationByUserEmail is null)
-			return ("Email não encontrado para validação!", false);
+		var code = new Random(Guid.NewGuid().GetHashCode()).Next(100000, 1000000);
 
-		if (verificationByUserEmail.Code == code)
-			return ("Email verificado", true);
-		
-		return ("Código Inválido", false);
+		if (verificationByUserEmail is null)
+			return (0, false);
+
+		verificationByUserEmail.Code = code;
+		await _repository.UpdateByUserEmailAsync(userEmail, verificationByUserEmail);
+		return (code, true);
+	}
+
+	public async Task<(string, bool)> ValidationAsync(string userEmail, int code)
+	{
+		var verificationByUserEmail = await _repository
+			.GetVerificationCodeByUserEmailAsync(userEmail);
+
+		if (verificationByUserEmail is null)
+			return ("E-mail não encontrado para validação!", false);
+
+		if (verificationByUserEmail.Code != code)
+			return ("Código inválido!", false);
+
+		if (DateTime.Now > verificationByUserEmail.Duration)
+			return ("Código de verificação expirado!", false);
+
+		return ("E-mail verificado com sucesso... Faça o login!", true);
 	} 
 }

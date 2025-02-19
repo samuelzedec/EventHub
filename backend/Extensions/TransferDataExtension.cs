@@ -49,6 +49,6 @@ public static class TransferData
     {
         target.UserEmail = source.UserEmail;
         target.Code = source.Code;
-        target.Duration = source.Duration;
+        target.Duration = DateTime.Now.AddHours(1);
     }
 }

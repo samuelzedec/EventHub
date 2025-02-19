@@ -51,7 +51,7 @@ public class AccountService : IAccountService
             accountDetails.CopyFrom(account);
 
             var verificationCode = await _checkingEmailService.GenerationCodeAsync(account.Email);
-            var sendEmail = _emailService.Send(
+            _emailService.Send(
                 account.Username,
                 account.Email,
                 "Código de Verificação",
@@ -94,11 +94,10 @@ public class AccountService : IAccountService
         if (repository == null)
             return (404, new ResultViewModel<string>(["Email não encontrado!"]));
 
-        if(repository.IsEmailVerified)
+        if (repository.IsEmailVerified)
             return (200, new ResultViewModel<string>("Email já está verificado"));
 
-        var (message, result) = await _checkingEmailService.Validation(email, code);
-
+        var (message, result) = await _checkingEmailService.ValidationAsync(email, code);
         if (result)
         {
             repository.IsEmailVerified = true;
@@ -109,12 +108,35 @@ public class AccountService : IAccountService
                 repository.Email,
                 "Senha de Acesso",
                 _emailService.HtmlForEmail(repository.Username, password));
-            return (200, new ResultViewModel<string>([message]));
+            return (200, new ResultViewModel<string>(data: message));
         }
+        if (message.Contains("expirado"))
+            return (410, new ResultViewModel<string>([message]));
 
-        if (message.Contains("Email"))
+        if (message.Contains("validação"))
             return (404, new ResultViewModel<string>([message]));
 
         return (422, new ResultViewModel<string>([message]));
+    }
+
+    public async Task<(int, ResultViewModel<string>)> ResendCodeAsync(string email)
+    {
+        var account = await _repository.GetByEmailAsync(email);
+        var (verificationCode, result) = await _checkingEmailService.RegenerationCodeAsync(email);
+
+        if (account is null)
+            return (404, new ResultViewModel<string>(["E-mail não encontrado!"]));
+
+        if (result)
+        {
+            _emailService.Send(
+                account.Username,
+                account.Email,
+                "Código de Verificação",
+                _emailService.HtmlForEmailVerification(account.Username, $"{_originAllowed}/validation-page?email={account.Email}&code={verificationCode}"));
+
+            return (200, new ResultViewModel<string>(data: "Código enviado com sucesso!"));
+        }
+        return (404, new ResultViewModel<string>(["E-mail não encontrado!"]));
     }
 }

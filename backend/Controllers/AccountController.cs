@@ -16,7 +16,7 @@ public class AccountController : ControllerBase
 
     [HttpPost("register")]
     public async Task<IActionResult> RegisterAccount(
-        [FromBody] EditorAccountViewModel data) 
+        [FromBody] EditorAccountViewModel data)
     {
         if (!ModelState.IsValid)
             return BadRequest(new ResultViewModel<User>(ModelState.GetErrors()));
@@ -31,7 +31,7 @@ public class AccountController : ControllerBase
         };
     }
 
-    [HttpPost("validation-email")]
+    [HttpGet("validation-email")]
     public async Task<IActionResult> ValidateEmail(
         [FromQuery] string email,
         [FromQuery] int code)
@@ -41,8 +41,22 @@ public class AccountController : ControllerBase
         {
             200 => Ok(message),
             404 => BadRequest(message),
+            410 => StatusCode(410, message),
             422 => UnprocessableEntity(message),
             _ => StatusCode(500, new ResultViewModel<string>(["Erro interno no servidor"]))
+        };
+    }
+
+    [HttpGet("resend-code")]
+    public async Task<IActionResult> ResendVerificationCode(
+        [FromQuery] string email)
+    {
+        Console.WriteLine(email);
+        var (statusCode, message) = await _service.ResendCodeAsync(email);
+        return statusCode switch
+        {
+            200 => Ok(message),
+            _ => BadRequest(message)
         };
     }
 
