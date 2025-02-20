@@ -9,9 +9,12 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter }
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import axios from "@/services/Axios";
 import useAlertStore from "@/stores/alertStore";
+import { useState } from "react";
+import Loading from "@/components/loading";
 
 export default function RegisterForm() {
 	const setStoreAlert = useAlertStore((state) => state.showAlert);
+	const [loading, setLoading] = useState<boolean>(false);
 	const formSchema = z.object({
 		username: z
 			.string()
@@ -34,6 +37,7 @@ export default function RegisterForm() {
 	});
 
 	const createUser = async (values: z.infer<typeof formSchema>) => {
+		setLoading(true);
 		try {
 			const response = await axios.post("account/register", values);
 			if (response.status == 201) {
@@ -43,7 +47,10 @@ export default function RegisterForm() {
 		} catch (error : any) {
 			console.log(error?.response.data.errors);
 			alertError(error?.response.data.errors);
-		}		
+		}
+		finally {
+			setLoading(false);
+		}
 	}
 
 	const alertSuccess = () => {
@@ -63,6 +70,8 @@ export default function RegisterForm() {
 			});
 		});
 	}
+
+	if (loading) return <Loading />;
 
 	return (
 		<>

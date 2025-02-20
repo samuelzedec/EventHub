@@ -1,62 +1,58 @@
 "use client";
-import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from "@/components/ui/card";
 import axios from "@/services/Axios";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import Loading from "./components/loading";
-import Result from "./components/result";
+import Loading from "../../../components/loading";
+import SeeResult from "./components/seeResult";
 
 interface Props {
+	email?: string;
 	status: number;
 	title: string;
 	message: string;
-	email?: string;
 };
 
 export default function ValidationPage() {
 	const searchParams = useSearchParams();
-	const [result, setResult] = useState<boolean | null>(null);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [apiData, setApiData] = useState<Props>(Object.assign({}));
 	const email = searchParams.get("email");
 	const code = searchParams.get("code");
+
+	const fetchData = async () => {
+		try {
+			const response = await axios.get("/account/validation-email", {
+				params: { email, code },
+			});
+
+			setApiData({
+				status: response.status,
+				title: "Sucesso",
+				message: response.data?.data
+			});
+
+		} catch (error: any) {
+			const errorMessage = error.response?.data?.errors[0];
+      setApiData({
+        status: error.response?.status,
+        title: "Erro",
+        message: errorMessage
+      });
+		} finally {
+			setIsLoading(!isLoading);
+		}
+	}
 	
 	useEffect(() => {
-
-		const fetchData = async () => {
-			try {
-				const response = await axios.get("/account/validation-email", {
-					params: { email, code },
-				});
-				console.log(response);
-				setApiData({
-					status: response.status,
-					title: "Sucesso",
-					message: response.data
-				});
-
-			} catch (error: any) {
-				setApiData({
-					status: error.response.status,
-					title: "Sucesso",
-					message: error.response.data.errors.join("\n")
-				});
-				console.log(error.response.data);
-			} finally {
-				setIsLoading(!isLoading);
-			}
-		}
 		fetchData();
-	}, [email, code]);
+	},[email, code]);
 
-	// return <Loading />;
-	return <Result
+	if (isLoading) return <Loading />;
+
+	return <SeeResult
 		status={apiData.status}
 		message={apiData.message}
-		title={apiData.status == 200 ? "Sucesso" : "Error" } />
+		title={apiData.status == 200 ? "Sucesso" : "Error"}
+		email={email}
+	/>
 }
-
-/*
-Object { data: "Email verificado!", errors: [] }
-data: "Email verificado!"
-*/ 
