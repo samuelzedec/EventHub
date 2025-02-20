@@ -95,7 +95,7 @@ public class AccountService : IAccountService
             return (404, new ResultViewModel<string>(["Email não encontrado!"]));
 
         if (repository.IsEmailVerified)
-            return (200, new ResultViewModel<string>("Email já está verificado"));
+            return (200, new ResultViewModel<string>(data: "Email já está verificado"));
 
         var (message, result) = await _checkingEmailService.ValidationAsync(email, code);
         if (result)
