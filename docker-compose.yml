@@ -4,7 +4,7 @@ services:
   backend:
     depends_on:
       - database
-    image: backend:V1.0.0
+    container_name: backend
     build:
       context: ./backend
     ports:
@@ -12,7 +12,7 @@ services:
 
   database:
     image: mcr.microsoft.com/mssql/server
-    container_name: sqlserver
+    container_name: database
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=1q2w3e4r@#$

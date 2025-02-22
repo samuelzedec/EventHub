@@ -6,7 +6,7 @@ namespace backend.Services;
 public class EmailService
 {
     private readonly SmtpSettings _smtpSettings;
-    public EmailService(IOptions<SmtpSettings> smtpSettingd, ILogger<EmailService> logger)
+    public EmailService(IOptions<SmtpSettings> smtpSettingd)
         => _smtpSettings = smtpSettingd.Value;
     
     public bool Send(

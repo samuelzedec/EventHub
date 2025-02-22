@@ -28,7 +28,7 @@ public class AccountService : IAccountService
         _passwordService = passwordService;
         _emailService = emailService;
         _checkingEmailService = checkingEmailService;
-        _originAllowed = originAllowrd.Value.Main;
+        _originAllowed = originAllowrd.Value.Url;
     }
 
     public async Task<(int, ResultViewModel<AccountDetailsViewModel>)> CreateAccountAsync(
