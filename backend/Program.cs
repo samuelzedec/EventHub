@@ -17,6 +17,7 @@ internal class Program
 		LoadConfiguration(builder);
 		ConfigureAuthentication(builder);
 		ConfigureMvc(builder);
+		ConfigureContainer(builder);
 		ConfigureDatabase(builder);
 		ConfigureServices(builder);
 
@@ -77,6 +78,14 @@ internal class Program
 			});
 	}
 
+	private static void ConfigureContainer(WebApplicationBuilder builder)
+	{
+		builder.WebHost.ConfigureKestrel(serverOptions =>
+		{
+			serverOptions.ListenAnyIP(5000);
+		});
+	}
+
 	private static void ConfigureAuthentication(WebApplicationBuilder builder)
 	{
 		var jwtSettings = builder
@@ -105,8 +114,7 @@ internal class Program
 					OnAuthenticationFailed = context =>
 					{
 						Console.WriteLine($"Token inválido: {context.Exception.Message}");
-						return Task.CompletedTask;
-						// Aqui estamos dizendo que o evento da falha de autenticação está concluída e pode prosseguir
+						return Task.CompletedTask; // Aqui estamos dizendo que o evento da falha de autenticação está concluída e pode prosseguir
 					}
 				};
 			});
